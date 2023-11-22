@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Component
 public class CarDAO {
+
     private static int CAR_COUNT;
     private List<Car> car;
 
