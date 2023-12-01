@@ -5,15 +5,14 @@ import web.model.User;
 import java.util.List;
 
 public interface UserService{
-    //Показывает всех User'ов
+
     List<User> getAllUser();
 
-    //Добавляет User'а
-    void add(User user);
+    void save(User user);
 
-    //Показывает информацию об 1 User'е
-    User getUser(int id);
+    User show(int id);
 
-    //Удаляет User'а
     void deleteUser(int id);
+
+    void update(User user);
 }

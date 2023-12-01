@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface UserDao {
 
-    //Показывает всех User'ов
+
     List<User> getAllUser();
 
-    //Добавляет User'а
-    void add(User user);
+    void save(User user);
 
-    //Показывает информацию об 1 User'е
-    User getUser(int id);
 
-    //Удаляет User'а
+    User show(int id);
+
+    void update(User user);
+
     void deleteUser(int id);
 }

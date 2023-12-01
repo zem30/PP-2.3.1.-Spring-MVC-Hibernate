@@ -9,32 +9,35 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
-@Transactional
 public class UserDAOImpl implements UserDao {
 
     @PersistenceContext
-    private static EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
-    @Transactional
     public List<User> getAllUser() {
-        return entityManager.createQuery("SELECT user from User user", User.class).getResultList();
+        String SQL = "select User as us from User";
+        return entityManager.createQuery(SQL, User.class).getResultList();
     }
 
+
     @Override
-    @Transactional
-    public void add(User user) {
+    public void save(User user) {
         entityManager.persist(user);
     }
 
     @Override
-    @Transactional
-    public User getUser(int id) {
+    public User show(int id) {
         return entityManager.find(User.class,id);
     }
 
     @Override
-    @Transactional
+    public void update(User user) {
+        entityManager.merge(user);
+    }
+
+
+    @Override
     public void deleteUser(int id) {
         entityManager.remove(id);
     }

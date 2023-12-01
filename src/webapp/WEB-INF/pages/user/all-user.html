@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>User</title>
@@ -10,23 +9,33 @@
 
 <table>
     <tr>
-        <th> Name </th>
-        <th> Lastname </th>
-        <th> Age </th>
-        <th> Department </th>
+        <th> Name</th>
+        <th> Lastname</th>
+        <th> Age</th>
+        <th> Department</th>
+        <th> Operation </th>
     </tr>
 
-    <tr th:each="user : ${users}">
+    <tr th:each="user : ${allUser}" th:object="${user}">
+        <td th:text="${user.getId()}"></td>
         <td th:text="${user.getName()}"></td>
         <td th:text="${user.getLastname()}"></td>
         <td th:text="${user.getAge()}"></td>
         <td th:text="${user.getDepartment()}"></td>
 
+        <td>
+            <a th:href="@{/edit/{id}(id=${user.getId()})}">Update</a>
+        </td>
+        <td>
+            <form th:method="DELETE" th:action="@{/delete/{id}(id=${user.getId()})}">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
     </tr>
 </table>
 
 <br>
-<input type = "button" value="Add"
-onclick="window.location.href = 'addNewUser'"/>
+<a href="/user/addNewUser">Create new user!</a>
+
 </body>
 </html>

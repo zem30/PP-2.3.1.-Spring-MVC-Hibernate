@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -44,19 +45,20 @@ public class ConfigBD {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        localContainerEntityManagerFactoryBean.setDataSource(getDataSource());
-        localContainerEntityManagerFactoryBean.setPackagesToScan("app.model");
+        LocalContainerEntityManagerFactoryBean EntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        EntityManagerFactoryBean.setDataSource(getDataSource());
+        EntityManagerFactoryBean.setPackagesToScan("wed.model");
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        localContainerEntityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
+        EntityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
         Properties jpaProperties = new Properties();
         jpaProperties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
         jpaProperties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         jpaProperties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
-        localContainerEntityManagerFactoryBean.setJpaProperties(jpaProperties);
+        EntityManagerFactoryBean.setJpaProperties(jpaProperties);
 
-        return localContainerEntityManagerFactoryBean;
+
+        return EntityManagerFactoryBean;
     }
 
     @Bean
@@ -65,5 +67,10 @@ public class ConfigBD {
         transactionManager.setDataSource(getDataSource());
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
+    }
+
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+        return new PersistenceExceptionTranslationPostProcessor();
     }
 }
