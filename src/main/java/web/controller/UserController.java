@@ -22,6 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
+//работает
     @GetMapping
     public String getAllUser(Model model) {
         List<User> allUser = userService.getAllUser();
@@ -29,7 +30,7 @@ public class UserController {
         return "user/all-user";
     }
 
-
+//работает
     @GetMapping("/new")
     public String NewUser(Model model) {
         model.addAttribute("user", new User());
@@ -43,19 +44,19 @@ public class UserController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public String edit(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", userService.show(id));
         return "user/info-user";
     }
-
-    @PatchMapping("/{id}")
+//работает
+    @PatchMapping("/edit/{id}")
     public String update(@ModelAttribute("user") User user) {
         userService.update(user);
         return "redirect:/user";
     }
-
-    @PostMapping("/delete/{id}")
-    public String deleteUser(@RequestParam("user") int id) {
+//не работает
+    @DeleteMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
         return "redirect:/user";
     }

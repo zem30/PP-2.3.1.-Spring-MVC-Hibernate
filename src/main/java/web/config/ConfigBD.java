@@ -16,17 +16,18 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Objects;
 import java.util.Properties;
 
 
 //Настройка БД
 @Configuration
-@EnableTransactionManagement
+@EnableTransactionManagement(proxyTargetClass = true)
 @PropertySource("classpath:db.properties")
 @ComponentScan("web")
 public class ConfigBD {
 
-    private Environment env;
+    private final Environment env;
 
     @Autowired
     public ConfigBD(Environment env) {
@@ -36,7 +37,7 @@ public class ConfigBD {
     @Bean
     public DataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(env.getProperty("db.driver"));
+        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("db.driver")));
         dataSource.setUrl(env.getProperty("db.url"));
         dataSource.setUsername(env.getProperty("db.username"));
         dataSource.setPassword(env.getProperty("db.password"));
@@ -46,8 +47,8 @@ public class ConfigBD {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean EntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        EntityManagerFactoryBean.setPackagesToScan("web.model");
         EntityManagerFactoryBean.setDataSource(getDataSource());
-        EntityManagerFactoryBean.setPackagesToScan("wed.model");
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         EntityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
@@ -56,6 +57,8 @@ public class ConfigBD {
         jpaProperties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         jpaProperties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
         EntityManagerFactoryBean.setJpaProperties(jpaProperties);
+
+
 
 
         return EntityManagerFactoryBean;

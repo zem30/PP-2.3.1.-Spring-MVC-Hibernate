@@ -6,6 +6,8 @@ import web.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -16,8 +18,7 @@ public class UserDAOImpl implements UserDao {
 
     @Override
     public List<User> getAllUser() {
-        String SQL = "select User as us from User";
-        return entityManager.createQuery(SQL, User.class).getResultList();
+        return entityManager.createQuery("from User", User.class).getResultList();
     }
 
 
@@ -39,6 +40,6 @@ public class UserDAOImpl implements UserDao {
 
     @Override
     public void deleteUser(int id) {
-        entityManager.remove(id);
+        entityManager.remove(show(id));
     }
 }
